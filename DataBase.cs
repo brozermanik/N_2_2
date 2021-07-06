@@ -144,6 +144,17 @@
 	    /// <returns>Искомый противник</returns>
 	    public EnemyController GetNearestEnemy(Controller unit)
 	    {
+		    float minDistance = Vector3.Distance(unit.transform.position, enemiesBase.First().transform.position);
+		    EnemyController ClosestEnemy = enemiesBase.First();
+		    foreach (var enemy in enemiesBase)
+		    {
+			    if (Vector3.Distance(unit.transform.position, enemy.transform.position) <= minDistance)
+			    {
+				    minDistance = Vector3.Distance(unit.transform.position, enemy.transform.position);
+				    ClosestEnemy = enemy;
+			    }
+		    }
+		    return ClosestEnemy;
 	    }
 
 	    /// <summary>
@@ -340,6 +351,7 @@
 	    /// <returns>Число предметов</returns>
 	    public int GetCountAllItems()
 	    {
+		    return inventoryBase.Count();
 	    }
 
 	    /// <summary>
@@ -358,6 +370,10 @@
 	    /// <returns>Количество предметов</returns>
 	    public int GetCountItemsByID(ulong id)
 	    {
+		    IEnumerable<Item> itemsByID = from e in inventoryBase
+			    where e.ID == id
+			    select e;
+		    return itemsByID.Count();
 	    }
 
 	    /// <summary>
@@ -368,6 +384,8 @@
 	    /// <returns>Количество предметов</returns>
 	    public int GetCountItemsByName(string name, bool isFullCompliance = true)
 	    {
+		    List<Item> itemsByName = new List<Item> {inventoryBase.Find(x => x.Name.Contains(name))};
+		    return itemsByName.Count();
 	    }
 
 	    /// <summary>
@@ -375,7 +393,9 @@
 	    /// </summary>
 	    public int GetCountUniqueItems()
 	    {
-		}
+		    List<Item> uniqueItems = inventoryBase.Distinct().ToList();
+		    return uniqueItems.Count();
+	    }
 
 	    /// <summary>
 	    /// Возвращает все дубликаты предметов из инвентаря и удаляет их оттуда
@@ -383,6 +403,11 @@
 	    /// <returns>Коллекция извлеченных предметов</returns>
 	    public IEnumerable<Item> GetAndRemoveAllDuplicates()
 	    {
+		    List<Item> removedItems = new List<Item>();
+			foreach(var i in inventoryBase)
+			{
+				
+			}
 		}
 
 	    /// <summary>
